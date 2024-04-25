@@ -63,7 +63,7 @@ fun ImageAndText(theImg: Int, theTxt: String, modifier: Modifier) {
     ) {
         Box(
             modifier = Modifier
-                .clip(shape = RoundedCornerShape(20.dp)) // rounded corners | border-radius
+                .clip(shape = RoundedCornerShape(30.dp)) // rounded corners | border-radius
                 .background(Color(0xFFc3ecd2)) // custom hex code color
                 .padding(all = 10.dp)
                 .size(140.dp)
