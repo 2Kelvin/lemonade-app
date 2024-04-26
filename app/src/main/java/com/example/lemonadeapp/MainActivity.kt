@@ -5,30 +5,32 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,15 +47,20 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// all images
-val lemonTree = R.drawable.lemon_tree
-val lemonSqueeze = R.drawable.lemon_squeeze
-val lemonadeDrink = R.drawable.lemon_drink
-val lemonRestart = R.drawable.lemon_restart
+// creating data objects
+data class ImageTextObject(val img: Int, val txt: Int)
+
+// list of all imageText objects
+val listOfimageTextObjects = listOf(
+    ImageTextObject(img = R.drawable.lemon_tree, txt = R.string.tap_lemon_string),
+    ImageTextObject(img = R.drawable.lemon_squeeze, txt = R.string.lemon_squeeze_string),
+    ImageTextObject(img = R.drawable.lemon_drink, txt = R.string.lemon_squeeze_string),
+    ImageTextObject(img = R.drawable.lemon_restart, txt = R.string.lemon_squeeze_string),
+)
 
 // image and text reusable composable
 @Composable
-fun ImageAndText(theImg: Int, theTxt: String, modifier: Modifier) {
+fun ImageAndText(obj: ImageTextObject, updateIndex: () -> Unit, modifier: Modifier) {
     Column(
         modifier = modifier
             .fillMaxHeight()
@@ -61,29 +68,24 @@ fun ImageAndText(theImg: Int, theTxt: String, modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Box(
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(30.dp)) // rounded corners | border-radius
-                .background(Color(0xFFc3ecd2)) // custom hex code color
-                .padding(all = 10.dp)
-                .size(140.dp)
-                .wrapContentSize(Alignment.Center) // center items horizontally & vertically
-                .clickable {
-                    // onclick => change the image and the text
-                }
+        Button(
+            onClick = { updateIndex() },
+            shape = RoundedCornerShape(40.dp), // custom button rounded corners
+            colors = ButtonDefaults.buttonColors(Color(0xFFc3ecd2)), // custom button bg color
+            modifier = Modifier.size(170.dp)
         ) {
             Image(
-                painter = painterResource(id = theImg),
+                painter = painterResource(id = obj.img),
                 contentDescription = "lemonade image",
-                modifier = Modifier.size(90.dp)
+                modifier = Modifier.size(100.dp)
             )
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
         Text(
-            text = theTxt,
-            fontSize = 16.sp
+            text = stringResource(id = obj.txt),
+            fontSize = 18.sp
         )
     }
 }
@@ -93,9 +95,12 @@ fun LemonadeApp(
     modifier: Modifier = Modifier
         .fillMaxSize()
 ) {
+    // initializing state
+    var index by remember { mutableStateOf(0) }
+
     Column(modifier = modifier) {
         Text(
-            text = "Lemonade",
+            text = stringResource(R.string.lemonade_header),
             modifier = Modifier
                 .background(Color.Yellow)
                 .height(55.dp)
@@ -103,13 +108,14 @@ fun LemonadeApp(
                 .wrapContentSize(Alignment.Center),
             color = Color.Black,
             fontWeight = FontWeight.Medium,
-            fontSize = 18.sp,
+            fontSize = 22.sp,
         )
 
         ImageAndText(
-            theImg = lemonTree,
-            theTxt = stringResource(R.string.tap_lemon_string),
-            modifier = modifier)
+            obj = listOfimageTextObjects[index],
+            updateIndex = { index++ }, // method to update index state
+            modifier = modifier
+        )
     }
 }
 
