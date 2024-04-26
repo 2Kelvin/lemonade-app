@@ -4,7 +4,7 @@
 
 ## Future Notes
 
-In this project I learnt to add interactivity to my app through buttons, clickable composers and state.
+In this project I learnt to add interactivity to my app through buttons, clickable composables and state.
 
 - To create similar data objects define a `data class <objectName>`. Then use it to initialize the new objects
 - import custom fonts in a simple way like so: (upload the fonts in res/fonts folder and rename into all font names to small letters without any special characters)
