@@ -16,9 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,11 +51,17 @@ class MainActivity : ComponentActivity() {
 data class ImageTextObject(val img: Int, val txt: Int)
 
 // list of all imageText objects
-val listOfimageTextObjects = listOf(
+val listOfImageTextObjects = listOf(
     ImageTextObject(img = R.drawable.lemon_tree, txt = R.string.tap_lemon_string),
     ImageTextObject(img = R.drawable.lemon_squeeze, txt = R.string.lemon_squeeze_string),
-    ImageTextObject(img = R.drawable.lemon_drink, txt = R.string.lemon_squeeze_string),
-    ImageTextObject(img = R.drawable.lemon_restart, txt = R.string.lemon_squeeze_string),
+    ImageTextObject(img = R.drawable.lemon_drink, txt = R.string.lemon_drink_string),
+    ImageTextObject(img = R.drawable.lemon_restart, txt = R.string.lemon_start_string),
+)
+
+// my custom PT sans font
+val ptSansFont = FontFamily(
+    Font(R.font.pt_sans_caption_regular, FontWeight.Normal),
+    Font(R.font.pt_sans_caption_bold, FontWeight.Bold)
 )
 
 // image and text reusable composable
@@ -72,12 +78,12 @@ fun ImageAndText(obj: ImageTextObject, updateIndex: () -> Unit, modifier: Modifi
             onClick = { updateIndex() },
             shape = RoundedCornerShape(40.dp), // custom button rounded corners
             colors = ButtonDefaults.buttonColors(Color(0xFFc3ecd2)), // custom button bg color
-            modifier = Modifier.size(170.dp)
+            modifier = Modifier.size(180.dp)
         ) {
             Image(
                 painter = painterResource(id = obj.img),
                 contentDescription = "lemonade image",
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.size(160.dp)
             )
         }
 
@@ -85,7 +91,9 @@ fun ImageAndText(obj: ImageTextObject, updateIndex: () -> Unit, modifier: Modifi
 
         Text(
             text = stringResource(id = obj.txt),
-            fontSize = 18.sp
+            fontSize = 16.sp,
+            fontFamily = ptSansFont,
+            fontWeight = FontWeight.Normal
         )
     }
 }
@@ -107,19 +115,23 @@ fun LemonadeApp(
                 .fillMaxWidth()
                 .wrapContentSize(Alignment.Center),
             color = Color.Black,
-            fontWeight = FontWeight.Medium,
             fontSize = 22.sp,
+            fontFamily = ptSansFont,
         )
 
         ImageAndText(
-            obj = listOfimageTextObjects[index],
-            updateIndex = { index++ }, // method to update index state
+            obj = listOfImageTextObjects[index],
+            updateIndex = { // lambda updating index state
+                          if (index >= (listOfImageTextObjects.size - 1)) {
+                              index = 0
+                          } else index++
+            },
             modifier = modifier
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun LemonadeAppPreview() {
     LemonadeApp()
