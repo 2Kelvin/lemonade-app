@@ -103,8 +103,10 @@ fun LemonadeApp(
     modifier: Modifier = Modifier
         .fillMaxSize()
 ) {
-    // initializing state
+    // state to move to the next imageAndText object
     var index by remember { mutableStateOf(0) }
+    // state to track squeeze count
+    var squeezeCount: Int = (2..4).random()
 
     Column(modifier = modifier) {
         Text(
@@ -121,17 +123,23 @@ fun LemonadeApp(
 
         ImageAndText(
             obj = listOfImageTextObjects[index],
-            updateIndex = { // lambda updating index state
-                          if (index >= (listOfImageTextObjects.size - 1)) {
-                              index = 0
-                          } else index++
-            },
-            modifier = modifier
+            modifier = modifier,
+            updateIndex = {
+                // if at the last index or greater, loop back to index 0
+                if (index >= (listOfImageTextObjects.size - 1)) {
+                    index = 0
+                } else if (index == 1) { // if at lemonSqueeze composable: index 1
+                    // decrease squeezeCount per click
+                    squeezeCount--
+                    // only when squeezeCount is 0, move to the next ImageAndText composable
+                    if (squeezeCount == 0) index++
+                } else index++
+            }
         )
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 fun LemonadeAppPreview() {
     LemonadeApp()

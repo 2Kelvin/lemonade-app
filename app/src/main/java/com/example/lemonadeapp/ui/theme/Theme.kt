@@ -60,7 +60,8 @@ fun LemonadeAppTheme(
             val window = (view.context as Activity).window
             // changing the status bar color to match my app's color (copy this 3 lines)
             window.statusBarColor = Color.Yellow.toArgb()
-            window.navigationBarColor = Color.Yellow.toArgb()
+            // navigationBar is the bottom bar with the 3 buttons for navigation
+//            window.navigationBarColor = Color.Yellow.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
