@@ -112,7 +112,7 @@ fun LemonadeApp(
         Text(
             text = stringResource(R.string.lemonade_header),
             modifier = Modifier
-                .background(Color.Yellow)
+                .background(Color(0xFFf9e44c))
                 .height(55.dp)
                 .fillMaxWidth()
                 .wrapContentSize(Alignment.Center),
